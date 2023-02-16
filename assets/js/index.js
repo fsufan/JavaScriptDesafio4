@@ -3,8 +3,7 @@ const propiedadesJSON = [
     {
         nombre: "Casa de campo",
         descripcion: "Un lugar ideal para descansar de la ciudad",
-        src:
-            "https://www.construyehogar.com/wp-content/uploads/2020/02/Dise%C3%B1o-casa-en-ladera.jpg",
+        src:"https://www.construyehogar.com/wp-content/uploads/2020/02/Dise%C3%B1o-casa-en-ladera.jpg",
         cuartos: 2,
         metros: 170
     },
@@ -50,49 +49,57 @@ const propiedadesJSON = [
     }
 ];
 
-/* Funcion del Boton Buscar*/
+
 let botonBuscar = document.getElementById("btn-buscar");
 let inputCantidadHab = document.querySelector("#cantidadHab");
 let inputMetrosMin = document.querySelector("#metrosMin");
 let inputMetrosMax = document.querySelector("#metrosMax");
+let divpropiedades = document.querySelector(".propiedad");
+let spanTotal = document.querySelector("#spanTotal");
 
-botonBuscar.addEventListener("click", function () {
+//totalPropiedades();
+//actualizarPropiedades();
+
+
+botonBuscar.addEventListener("click", function() {
     let cantidadHab = inputCantidadHab.value; 
     let metrosMin = inputMetrosMin.value; 
     let metrosMax = inputMetrosMax.value; 
 
     const inputs = [cantidadHab, metrosMin, metrosMax];
 
-
-    if (!validarInputs(inputs)) {
+    if(!validarInputs(inputs)) {
         alert("Faltan campos por rellenar");
         return false;
     }
-
+    
     let propiedadesFiltro = filtrarPropiedades(propiedadesJSON, inputs);
+    spanTotal.innerHTML = propiedadesFiltro.length;
 
+    let html = "";
     
-    let template = "";
-    
-    for(let propiedad of propiedadesJSON){
-
-    template += `
-    <div class="propiedades">
+    for(let i = 0; i < propiedadesFiltro.length; i++){
+        
+    template = `
     <div class="propiedad">
-        <div class="img" style="background-image: url(${propiedadesJSON[0].src}')"></div>
+        <div class="img" style="background-image: url('${propiedadesFiltro[0].src}')"></div>
         <section>
-            <h5>${propiedadesJSON[0].nombre}</h5>
+            <h5>${propiedadesFiltro[0].nombre}</h5>
             <div class="d-flex justify-content-between">
-                <p>Cuartos: ${propiedadesJSON[0].cuartos}</p>
-                <p>Metros: ${propiedadesJSON[0].metros}</p>
+                <p>Cuartos: ${propiedadesFiltro[0].cuartos}</p>
+                <p>Metros: ${propiedadesFiltro[0].metros}</p>
             </div>
-            <p class="my-3">${propiedadesJSON[0].descripcion}</p>
+            <p class="my-3">${propiedadesFiltro[0].descripcion}</p>
             <button class="btn btn-info ">Ver más</button>
         </section>
     </div>`;
+    html += template;
     }
-
+    
+    divpropiedades.innerHTML = html;
 });
+
+
 
 const validarInputs = inputs => {
 
@@ -108,9 +115,7 @@ const validarInputs = inputs => {
 const filtrarPropiedades = (propiedades, inputs) =>{
 
     let propiedadesFiltro = [];
-    let indexPropiedadFiltrada = 0 ;
-
-    //codigo 
+    let indexPropiedadFiltrada = 0;
 
     for(let i = 0; i < propiedades.length; i++){
         if(
@@ -118,12 +123,39 @@ const filtrarPropiedades = (propiedades, inputs) =>{
             propiedades[i].metros >= inputs[1] &&
             propiedades[i].metros <= inputs[2]
         ){
-            propiedadesFiltradas [indexPropiedadFiltrada] = propiedades[i];
+            propiedadesFiltro [indexPropiedadFiltrada] = propiedades[i];
             indexPropiedadFiltrada ++;
         }
     }
-
-
     return propiedadesFiltro;
 
+}
+
+function actualizarPropiedades(){
+    let html = "";
+    
+    for(let propiedad of propiedadesJSON){
+
+    template = `
+    <div class="propiedad">
+        <div class="img" style="background-image: url('${propiedad.src}')"></div>
+        <section>
+            <h5>${propiedad.nombre}</h5>
+            <div class="d-flex justify-content-between">
+                <p>Cuartos: ${propiedad.cuartos}</p>
+                <p>Metros: ${propiedad.metros}</p>
+            </div>
+            <p class="my-3">${propiedad.descripcion}</p>
+            <button class="btn btn-info ">Ver más</button>
+        </section>
+    </div>`;
+    html += template;
+} 
+    divpropiedades.innerHTML = html;
+}
+
+function totalPropiedades(){
+    let total = propiedadesJSON.length;
+
+    spanTotal.innerHTML = total;
 }
